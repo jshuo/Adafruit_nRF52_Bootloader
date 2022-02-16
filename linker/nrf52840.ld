@@ -11,9 +11,10 @@ MEMORY
    *  those values do not match. The check is performed in main.c, see
    *  APP_ERROR_CHECK_BOOL(*((uint32_t *)NRF_UICR_BOOT_START_ADDRESS) == BOOTLOADER_REGION_START);
    */
-  FLASH (rx) : ORIGIN = 0xF4000, LENGTH = 0xFE000-0xF4000 - 2K /* 38 KB */
+  FLASH (rx) : ORIGIN = 0xF4000, LENGTH = 0xFE000-0xF4000-2048-32 /* 38 KB */
+  SECEC (rx) : ORIGIN = 0xfd7e0, LENGTH = 0x20
 
-  BOOTLOADER_CONFIG (r): ORIGIN = 0xFE000 - 2K, LENGTH = 2K
+  BOOTLOADER_CONFIG (r): ORIGIN = 0xFE000 - 2048, LENGTH = 2048
 
   /** Location of mbr params page in flash. */
   MBR_PARAMS_PAGE (rw) : ORIGIN = 0xFE000, LENGTH = 0x1000
@@ -31,7 +32,7 @@ MEMORY
   DBL_RESET (rwx) :  ORIGIN = 0x20007F7C, LENGTH = 0x04
   
   /** Location of non initialized RAM. Non initialized RAM is used for exchanging bond information
-   *  from application to bootloader when using buttonless DFU OTA. */
+   *  from application to bootloader when using buttonluss DFU OTA. */
   NOINIT (rwx) :  ORIGIN = 0x20007F80, LENGTH = 0x80
   
   
@@ -45,6 +46,11 @@ MEMORY
 
 SECTIONS
 {
+  .secec :
+  {
+  *(.secec);
+  } > SECEC
+
   .fs_data_out ALIGN(4):
   {
     PROVIDE( __start_fs_data = .);

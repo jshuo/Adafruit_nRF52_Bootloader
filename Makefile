@@ -184,7 +184,8 @@ C_SRC += \
 	src/usb/msc_uf2.c \
 	src/usb/usb_desc.c \
 	src/usb/usb.c \
-	src/usb/uf2/ghostfat.c
+	src/usb/uf2/ghostfat.c \
+    src/secec.c
 
 # TinyUSB stack
 C_SRC += \
@@ -324,7 +325,7 @@ endif
 LDFLAGS += \
 	$(CFLAGS) \
 	-Wl,-L,linker -Wl,-T,$(LD_FILE) \
-	-Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections \
+	-Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections,-ueckey \
 	-specs=nosys.specs -specs=nano.specs
 
 LIBS += -lm -lc
@@ -359,8 +360,8 @@ INC_PATHS = $(addprefix -I,$(IPATH))
 .PHONY: all clean flash dfu-flash sd gdbflash gdb
 
 # default target to build
-all: $(BUILD)/$(OUT_NAME).out $(BUILD)/$(OUT_NAME)_nosd.hex $(BUILD)/update-$(OUT_NAME)_nosd.uf2 $(BUILD)/$(MERGED_FILE).hex $(BUILD)/$(MERGED_FILE).zip
-
+# all: $(BUILD)/$(OUT_NAME).out $(BUILD)/$(OUT_NAME)_nosd.hex $(BUILD)/update-$(OUT_NAME)_nosd.uf2 $(BUILD)/$(MERGED_FILE).hex $(BUILD)/$(MERGED_FILE).zip
+all: $(BUILD)/$(OUT_NAME).out $(BUILD)/$(OUT_NAME)_nosd.hex $(BUILD)/update-$(OUT_NAME)_nosd.uf2 $(BUILD)/$(MERGED_FILE).hex 
 # Print out the value of a make variable.
 # https://stackoverflow.com/questions/16467718/how-to-print-out-a-variable-in-makefile
 print-%:
